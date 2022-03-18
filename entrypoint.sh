@@ -89,6 +89,12 @@ if [ -n "$CNAME" ]; then
   git add CNAME
 fi
 
+# Update gh-pages root index page
+if [ -f "$FOLDER/ghpages.html"]; then
+  cp "../$FOLDER/ghpages.html" index.html
+  git add index.html
+fi
+
 # Commits the data to Github.
 if [ -z "$VERSION" ]
 then
