@@ -90,7 +90,7 @@ if [ -n "$CNAME" ]; then
 fi
 
 # Update gh-pages root index page
-if [ -f "$FOLDER/ghpages.html"]; then
+if [ -f "$FOLDER/ghpages.html" ]; then
   cp "../$FOLDER/ghpages.html" index.html
   git add index.html
 fi
