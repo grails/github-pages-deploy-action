@@ -102,8 +102,8 @@ fi
 # Commits the data to Github.
 if [ -z "$VERSION" ]
 then
-  echo "No Version. Publishing Snapshot of Docs"
   if [ -z "$OLDER_VERSION" ] || [ "$OLDER_VERSION" = "false" ]; then
+    echo "No Version. Publishing Snapshot of Docs"
     if [ -n "${DOC_SUB_FOLDER}" ]; then
       mkdir -p snapshot/$DOC_SUB_FOLDER
       cp -r "../$FOLDER/." ./snapshot/$DOC_SUB_FOLDER/
@@ -115,7 +115,6 @@ then
     fi
   fi
 else 
-    echo "Publishing $VERSION of Docs"
     if [ -z "$OLDER_VERSION" ] || [ "$OLDER_VERSION" = "false" ]
     then 
       echo "Publishing Latest Docs"
@@ -130,6 +129,7 @@ else
       fi
     fi   
 
+    echo "Publishing $VERSION of Docs"
     majorVersion=${VERSION:0:4}
     majorVersion="${majorVersion}x"
 
