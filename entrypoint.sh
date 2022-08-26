@@ -19,6 +19,10 @@ then
   DOC_FOLDER=$BRANCH
 fi
 
+if [ -z "$OLDER_VERSION" ]; then
+  OLDER_VERSION=$BETA
+fi
+
 if [ -z "$FOLDER" ]
 then
   echo "You must provide the action with the folder name in the repository where your compiled page lives."
@@ -99,18 +103,20 @@ fi
 if [ -z "$VERSION" ]
 then
   echo "No Version. Publishing Snapshot of Docs"
-  if [ -n "${DOC_SUB_FOLDER}" ]; then
-    mkdir -p snapshot/$DOC_SUB_FOLDER
-    cp -r "../$FOLDER/." ./snapshot/$DOC_SUB_FOLDER/
-    git add snapshot/$DOC_SUB_FOLDER/*
-  else
-    mkdir -p snapshot
-    cp -r "../$FOLDER/." ./snapshot/
-    git add snapshot/*
+  if [ -z "$OLDER_VERSION" ] || [ "$OLDER_VERSION" = "false" ]; then
+    if [ -n "${DOC_SUB_FOLDER}" ]; then
+      mkdir -p snapshot/$DOC_SUB_FOLDER
+      cp -r "../$FOLDER/." ./snapshot/$DOC_SUB_FOLDER/
+      git add snapshot/$DOC_SUB_FOLDER/*
+    else
+      mkdir -p snapshot
+      cp -r "../$FOLDER/." ./snapshot/
+      git add snapshot/*
+    fi
   fi
 else 
     echo "Publishing $VERSION of Docs"
-    if [ -z "$BETA" ] || [ "$BETA" = "false" ]
+    if [ -z "$OLDER_VERSION" ] || [ "$OLDER_VERSION" = "false" ]
     then 
       echo "Publishing Latest Docs"
       if [ -n "${DOC_SUB_FOLDER}" ]; then
