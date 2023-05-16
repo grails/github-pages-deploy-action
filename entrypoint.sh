@@ -19,8 +19,12 @@ then
   DOC_FOLDER=$BRANCH
 fi
 
-if [ -z "$OLDER_VERSION" ]; then
-  OLDER_VERSION=$BETA
+if [ -z "$SKIP_SNAPSHOT" ]; then
+  SKIP_SNAPSHOT="$BETA"
+fi
+
+if [ -z "$SKIP_LATEST" ]; then
+  SKIP_LATEST="$SKIP_SNAPSHOT"
 fi
 
 if [ -z "$FOLDER" ]
@@ -98,7 +102,7 @@ fi
 # Commits the data to Github.
 if [ -z "$VERSION" ]
 then
-  if [ -z "$OLDER_VERSION" ] || [ "$OLDER_VERSION" = "false" ]; then
+  if [ -z "$SKIP_SNAPSHOT" ] || [ "$SKIP_SNAPSHOT" == "false" ]; then
     echo "No Version. Publishing Snapshot of Docs"
     if [ -n "${DOC_SUB_FOLDER}" ]; then
       mkdir -p snapshot/$DOC_SUB_FOLDER
@@ -111,7 +115,7 @@ then
     fi
   fi
 else 
-    if [ -z "$OLDER_VERSION" ] || [ "$OLDER_VERSION" = "false" ]
+    if [ -z "$SKIP_LATEST" ] || [ "$SKIP_LATEST" == "false" ]
     then 
       echo "Publishing Latest Docs"
       if [ -n "${DOC_SUB_FOLDER}" ]; then
