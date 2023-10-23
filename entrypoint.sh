@@ -19,6 +19,14 @@ then
   DOC_FOLDER=$BRANCH
 fi
 
+if [ -z "$SKIP_SNAPSHOT" ]; then
+  SKIP_SNAPSHOT="$BETA"
+fi
+
+if [ -z "$SKIP_LATEST" ]; then
+  SKIP_LATEST="$SKIP_SNAPSHOT"
+fi
+
 if [ -z "$FOLDER" ]
 then
   echo "You must provide the action with the folder name in the repository where your compiled page lives."
@@ -51,6 +59,7 @@ cd $GITHUB_WORKSPACE && \
 git init && \
 git config --global user.email "${COMMIT_EMAIL}" && \
 git config --global user.name "${COMMIT_NAME}" && \
+git config --global http.version HTTP/1.1 && \
 
 git config --global http.version HTTP/1.1
 git config --global http.postBuffer 157286400
@@ -88,22 +97,29 @@ if [ -n "$CNAME" ]; then
   git add CNAME
 fi
 
+# Update gh-pages root index page
+if [ -f "../$FOLDER/ghpages.html" ]; then
+  cp "../$FOLDER/ghpages.html" index.html
+  git add index.html
+fi
+
 # Commits the data to Github.
 if [ -z "$VERSION" ]
 then
-  echo "No Version. Publishing Snapshot of Docs"
-  if [ -n "${DOC_SUB_FOLDER}" ]; then
-    mkdir -p snapshot/$DOC_SUB_FOLDER
-    cp -r "../$FOLDER/." ./snapshot/$DOC_SUB_FOLDER/
-    git add snapshot/$DOC_SUB_FOLDER/*
-  else
-    mkdir -p snapshot
-    cp -r "../$FOLDER/." ./snapshot/
-    git add snapshot/*
+  if [ -z "$SKIP_SNAPSHOT" ] || [ "$SKIP_SNAPSHOT" == "false" ]; then
+    echo "No Version. Publishing Snapshot of Docs"
+    if [ -n "${DOC_SUB_FOLDER}" ]; then
+      mkdir -p snapshot/$DOC_SUB_FOLDER
+      cp -r "../$FOLDER/." ./snapshot/$DOC_SUB_FOLDER/
+      git add snapshot/$DOC_SUB_FOLDER/*
+    else
+      mkdir -p snapshot
+      cp -r "../$FOLDER/." ./snapshot/
+      git add snapshot/*
+    fi
   fi
 else 
-    echo "Publishing $VERSION of Docs"
-    if [ -z "$BETA" ] || [ "$BETA" = "false" ]
+    if [ -z "$SKIP_LATEST" ] || [ "$SKIP_LATEST" == "false" ]
     then 
       echo "Publishing Latest Docs"
       if [ -n "${DOC_SUB_FOLDER}" ]; then
@@ -117,6 +133,7 @@ else
       fi
     fi   
 
+    echo "Publishing $VERSION of Docs"
     majorVersion=${VERSION:0:4}
     majorVersion="${majorVersion}x"
 
