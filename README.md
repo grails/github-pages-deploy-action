@@ -1,3 +1,7 @@
+# Used By
+
+https://github.com/search?q=org%3Agrails+%22uses%3A+grails%2Fgithub-pages-deploy-action%22+language%3Ayml&type=code
+
 # GitHub Pages Deploy Action :rocket: 
 
 [![Actions Status](https://github.com/grails/github-pages-deploy-action/workflows/integration/badge.svg)](https://github.com/grails/github-pages-deploy-action/actions) [![View Action](https://img.shields.io/badge/view-action-blue.svg)](https://github.com/marketplace/actions/deploy-to-github-pages) [![Issues](https://img.shields.io/github/issues/JamesIves/github-pages-deploy-action.svg)](https://github.com/grails/github-pages-deploy-action/issues)
